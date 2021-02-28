@@ -1,0 +1,10 @@
+"..\Output\main.obj",
+"..\Output\Delay.obj",
+"..\Output\Uart3.obj",
+"..\Output\Key.obj",
+"..\Output\MQ-5.obj",
+"..\Output\mcu_api.obj",
+"..\Output\protocol.obj",
+"..\Output\system.obj" 
+TO "..\Output\Project" 
+PRINT("..\listing\Project.m51") RAMSIZE(256) 

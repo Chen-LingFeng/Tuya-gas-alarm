@@ -1,0 +1,100 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              02/28/2021 16:24:52 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\Output\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\MDK\C51\BIN\C51.EXE ..\SourceProgram\main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Sou
+                    -rceProgram;..\SDK) DEBUG OBJECTEXTEND PRINT(..\listing\main.lst) TABS(2) OBJECT(..\Output\main.obj)
+
+line level    source
+
+   1          #include "STC8A.h"     //STC8A单片机头文件（包含单片机的特殊功能寄存器的定义）
+   2          #include "Delay.h"     //延时函数头文件
+   3          #include "Uart3.h"     //串口三头文件
+   4          #include "wifi.h"      //wifi模块头文件
+   5          #include "Key.h"       //按键头文件
+   6          #include "MQ-5.h"      //燃气检测模块头文件
+   7          /************************函数声明*************************************/
+   8          void STC8A_IOinit(void);      //STC8A单片机引脚初始化函数
+   9          
+  10          /************************变量定义*************************************/
+  11          
+  12          /****************************************************************************************************
+  13          /*函数：void STC8A_IOinit(void)
+  14          /*功能：STC8A单片机引脚初始化函数
+  15          /*说明：统一将单片机所有引脚初始化为准双向口工作模式
+  16          /*修改日期：2021-02-22
+  17          /*作者：华南理工大学广州学院电工电子创新实验室——陈凌峰  
+  18          /****************************************************************************************************/
+  19          void STC8A_IOinit(void)
+  20          {
+  21   1        P0M1 = 0; P0M0 = 0; //设置为准双向口
+  22   1        P1M1 = 0; P1M0 = 0; //设置为准双向口
+  23   1        P2M1 = 0; P2M0 = 0; //设置为准双向口
+  24   1        P3M1 = 0; P3M0 = 0; //设置为准双向口
+  25   1        P4M1 = 0; P4M0 = 0; //设置为准双向口
+  26   1        P5M1 = 0; P5M0 = 0; //设置为准双向口
+  27   1        P6M1 = 0; P6M0 = 0; //设置为准双向口
+  28   1        P7M1 = 0; P7M0 = 0; //设置为准双向口 
+  29   1      //  P0 = 0XFF;  P1 = 0XFF;  P2 = 0XFF; 
+  30   1      //  P3 = 0XFF;  P4 = 0XFF;  P5 = 0XFF; 
+  31   1      //  P6 = 0XFF;  P7 = 0XFF;
+  32   1      }
+  33          
+  34          /****************************************************************************************************
+  35          /*函数：void main()
+  36          /*功能：
+  37          /*说明：主函数
+  38          /*修改日期：2021-02-22
+  39          /*作者：华南理工大学广州学院电工电子创新实验室——陈凌峰  
+  40          /****************************************************************************************************/
+  41          void main()
+  42          {
+  43   1        STC8A_IOinit();           //STC8A单片机引脚初始化函数
+  44   1        Uart3_Init();             //串行口3使用定时器T2作为波特率发生器初始化函数
+  45   1        wifi_protocol_init();     //wifi协议初始化函数
+  46   1        while(1)
+  47   1        {
+  48   2          wifi_uart_service();    //wifi串口数据处理服务
+  49   2          Scan_Key();             //按键接P4.0，切换smart模式（快闪）和AP模式（慢闪）
+  50   2          Sensor_Scan();          //传感器检测。当检测到燃气时，蜂鸣器发出声音
+  51   2          mcu_dp_bool_update(DPID_IS_AS_DETECTED,~P44);
+  52   2          switch(mcu_get_wifi_work_state())         //配网指示
+  53   2          {
+  54   3            case SMART_CONFIG_STATE:
+C51 COMPILER V9.60.0.0   MAIN                                                              02/28/2021 16:24:52 PAGE 2   
+
+  55   3              P32=0;Delay_ms(100);      //快闪：200ms闪烁一次
+  56   3            P32=1;Delay_ms(100);        //Smart配置状态LED快闪，led闪烁请用户完成
+  57   3            break;
+  58   3            case AP_STATE:
+  59   3              P32=0;Delay_ms(500);      //慢闪：1000ms闪烁一次
+  60   3            P32=1;Delay_ms(500);        //AP配置状态LED慢闪，led闪烁请用户完成
+  61   3            break;
+  62   3            case WIFI_NOT_CONNECTED:
+  63   3              P32=1;                    //WIFI配完成，正在连接路由器，LED常暗
+  64   3            break;
+  65   3            case WIFI_CONNECTED:
+  66   3              P32=0;                    //路由器连接成功，LED常亮
+  67   3            break;
+  68   3            case WIFI_CONN_CLOUD:
+  69   3              P32=0;                    //wifi已连上云端，LED常亮
+  70   3            default:break;
+  71   3          }
+  72   2        }
+  73   1      }
+  74          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    132    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

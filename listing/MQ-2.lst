@@ -1,0 +1,46 @@
+C51 COMPILER V9.60.0.0   MQ_2                                                              02/26/2021 17:10:05 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MQ_2
+OBJECT MODULE PLACED IN ..\Output\MQ-2.obj
+COMPILER INVOKED BY: C:\Keil_v5\MDK\C51\BIN\C51.EXE ..\SourceProgram\MQ-2.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Sou
+                    -rceProgram) DEBUG OBJECTEXTEND PRINT(..\listing\MQ-2.lst) TABS(2) OBJECT(..\Output\MQ-2.obj)
+
+line level    source
+
+   1          #include "MQ-2.h" 
+   2          
+   3          
+   4          /**************************************************************************
+   5          功能描述：传感器检测
+   6          入口参数：无
+   7          返回值：无
+   8           *************************************************************************/
+   9          void Sensor_Scan(void)
+  10          {
+  11   1         if(Sensor_IN == 0)        //MQ-2传感器感应到可燃性气体浓度达到一定值，DO针脚输出低电平      
+  12   1         {
+  13   2           P44=0;          //点亮蓝色指示灯DS1
+  14   2         }
+  15   1         else                      //MQ-2传感器感应到可燃性气体浓度低于一定值，DO针脚输出高电平 
+  16   1         {
+  17   2           P44=1;        //熄灭蓝色指示灯DS1
+  18   2         }
+  19   1      }
+  20          
+  21          /*********************************END FILE********************************************/ 
+  22          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      9    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
